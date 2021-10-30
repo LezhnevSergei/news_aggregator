@@ -14,3 +14,19 @@ func TestNewsRepository_Create(t *testing.T) {
 	assert.NoError(t, s.News().Create(n))
 	assert.NotNil(t, n)
 }
+
+func TestNewsRepository_Get(t *testing.T) {
+	s := teststore.New()
+
+	n := models.TestNews()
+	n2 := models.TestNews()
+
+	s.News().Create(n)
+	s.News().Create(n2)
+
+	news, err := s.News().GetList()
+
+	assert.NoError(t, err)
+	assert.NotNil(t, news)
+	assert.Equal(t, len(*news), 2)
+}

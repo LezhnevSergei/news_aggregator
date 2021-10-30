@@ -7,6 +7,15 @@ type NewsRepository struct {
 	news  map[int]*models.News
 }
 
+func (r *NewsRepository) GetList() (*[]models.News, error) {
+	var news []models.News
+	for _, newsItem := range r.news {
+		news = append(news, *newsItem)
+	}
+
+	return &news, nil
+}
+
 func (r *NewsRepository) Create(n *models.News) error {
 	n.ID = len(r.news) + 1
 	r.news[n.ID] = n

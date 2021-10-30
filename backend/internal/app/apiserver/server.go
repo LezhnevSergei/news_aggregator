@@ -34,6 +34,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) configureRouter() {
 	s.router.HandleFunc("/news", s.handleNewsCreate()).Methods("POST")
+	s.router.HandleFunc("/news", s.handleNewsGetList()).Methods("GET")
 }
 
 func (s *server) handleNewsCreate() http.HandlerFunc {
@@ -58,6 +59,29 @@ func (s *server) handleNewsCreate() http.HandlerFunc {
 		}
 
 		s.respond(w, r, http.StatusCreated, n)
+	}
+}
+
+func (s *server) handleNewsGetList() http.HandlerFunc {
+	type request struct {
+		Title     string    `json:"title"`
+		CreatedAt time.Time `json:"created_at" time_format:"sql_datetime" time_location:"UTC"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		news, err := s.store.News().GetList()
+		if err != nil {
+			s.error(w, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusOK, news)
 	}
 }
 
