@@ -3,7 +3,7 @@ package models
 import "time"
 
 type News struct {
-	ID        int
-	Title     string
-	CreatedAt time.Time
+	ID        int       `json:"id"`
+	Title     string    `json:"title"`
+	CreatedAt time.Time `json:"created_at"`
 }
