@@ -1,6 +1,8 @@
 package sqlstore
 
-import "github.com/LezhnevSergei/news_aggregator/internal/app/models"
+import (
+	"github.com/LezhnevSergei/news_aggregator/internal/app/models"
+)
 
 type NewsRepository struct {
 	store *Store
@@ -12,6 +14,15 @@ func (r NewsRepository) Create(n *models.News) error {
 		n.Title,
 		n.CreatedAt,
 	).Scan(&n.ID)
+}
+
+// CreateList I tried to do it with one request, but I couldn't :(
+func (r NewsRepository) CreateList(news *[]models.News) {
+	for _, n := range *news {
+		if err := r.Create(&n); err != nil {
+			continue
+		}
+	}
 }
 
 func (r NewsRepository) GetList() (*[]models.News, error) {

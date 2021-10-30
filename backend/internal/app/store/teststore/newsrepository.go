@@ -22,3 +22,10 @@ func (r *NewsRepository) Create(n *models.News) error {
 
 	return nil
 }
+
+func (r *NewsRepository) CreateList(news *[]models.News) {
+	for _, n := range *news {
+		n.ID = len(r.news) + 1
+		r.news[n.ID] = &n
+	}
+}

@@ -17,3 +17,19 @@ func TestNewsRepository_Create(t *testing.T) {
 	assert.NoError(t, s.News().Create(n))
 	assert.NotNil(t, n)
 }
+
+func TestNewsRepository_CreateList(t *testing.T) {
+	db, teardown := sqlstore.TestDB(t, databaseURL)
+	defer teardown("news")
+
+	s := sqlstore.New(db)
+
+	n := models.TestNews()
+	n2 := models.TestNews()
+
+	news := []models.News{*n, *n2}
+
+	s.News().CreateList(&news)
+
+	assert.Equal(t, len(news), 2)
+}

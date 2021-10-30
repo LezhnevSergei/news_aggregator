@@ -45,11 +45,4 @@ func TestServer_HandleNewsCreate(t *testing.T) {
 			assert.Equal(t, tc.expectedCode, rec.Code)
 		})
 	}
-
-	//rec := httptest.NewRecorder()
-	//req, _ := http.NewRequest(http.MethodPost, "/news", nil)
-	//s := NewServer(teststore.New())
-	//s.ServeHTTP(rec, req)
-	//
-	//assert.Equal(t, rec.Code, http.StatusOK)
 }
