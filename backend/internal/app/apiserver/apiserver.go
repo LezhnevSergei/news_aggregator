@@ -2,8 +2,10 @@ package apiserver
 
 import (
 	"database/sql"
+	"github.com/LezhnevSergei/news_aggregator/internal/app/aggregator"
 	"github.com/LezhnevSergei/news_aggregator/internal/app/store/sqlstore"
 	"net/http"
+	"sync"
 )
 
 func Start(config *Config) error {
@@ -16,6 +18,9 @@ func Start(config *Config) error {
 
 	store := sqlstore.New(db)
 	srv := NewServer(store)
+
+	na := aggregator.NewNewsAggregator("https://lenta.ru/rss/news", new(sync.Mutex))
+	go na.SaveNews(store, 5)
 
 	return http.ListenAndServe(config.BindAddr, srv)
 }
