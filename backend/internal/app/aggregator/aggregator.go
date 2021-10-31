@@ -47,15 +47,15 @@ func (a *NewsAggregator) getNewNews(feed *gofeed.Feed, store store.Store) (*[]mo
 	if err != nil {
 		return nil, err
 	}
-	fromTime := time.Time{}
+	fromTime := time.Now().UTC().Add(time.Hour * 2)
 	if len(*news) > 0 {
-		fromTime = ((*news)[0]).CreatedAt
+		fromTime = ((*news)[0]).CreatedAt.UTC()
 	}
 	var newNews []models.News
-	parsedNews := a.getParsedNews(feed)
 
+	parsedNews := a.getParsedNews(feed)
 	for _, n := range *parsedNews {
-		if n.CreatedAt.After(fromTime) {
+		if n.CreatedAt.UTC().Add(time.Hour * 3).After(fromTime) {
 			newNews = append(newNews, n)
 		}
 	}

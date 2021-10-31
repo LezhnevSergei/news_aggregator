@@ -63,17 +63,9 @@ func (s *server) handleNewsCreate() http.HandlerFunc {
 }
 
 func (s *server) handleNewsGetList() http.HandlerFunc {
-	type request struct {
-		Title     string    `json:"title"`
-		CreatedAt time.Time `json:"created_at" time_format:"sql_datetime" time_location:"UTC"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
-		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
-			s.error(w, r, http.StatusBadRequest, err)
-			return
-		}
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 		news, err := s.store.News().GetList()
 		if err != nil {

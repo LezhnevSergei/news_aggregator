@@ -20,7 +20,7 @@ func Start(config *Config) error {
 	srv := NewServer(store)
 
 	na := aggregator.NewNewsAggregator("https://lenta.ru/rss/news", new(sync.Mutex))
-	go na.SaveNews(store, 5)
+	go na.SaveNews(store, 2)
 
 	return http.ListenAndServe(config.BindAddr, srv)
 }
