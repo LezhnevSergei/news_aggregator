@@ -6,4 +6,5 @@ type NewsRepository interface {
 	Create(news *models.News) error
 	CreateList(news *[]models.News)
 	GetList() (*[]models.News, error)
+	GetNewsByTitle(search string) (*[]models.News, error)
 }

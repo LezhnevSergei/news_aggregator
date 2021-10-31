@@ -1,6 +1,9 @@
 package teststore
 
-import "github.com/LezhnevSergei/news_aggregator/internal/app/models"
+import (
+	"github.com/LezhnevSergei/news_aggregator/internal/app/models"
+	"strings"
+)
 
 type NewsRepository struct {
 	store *Store
@@ -28,4 +31,15 @@ func (r *NewsRepository) CreateList(news *[]models.News) {
 		n.ID = len(r.news) + 1
 		r.news[n.ID] = &n
 	}
+}
+
+func (r *NewsRepository) GetNewsByTitle(search string) (*[]models.News, error) {
+	var news []models.News
+	for _, newsItem := range r.news {
+		if strings.Contains(newsItem.Title, search) {
+			news = append(news, *newsItem)
+		}
+	}
+
+	return &news, nil
 }

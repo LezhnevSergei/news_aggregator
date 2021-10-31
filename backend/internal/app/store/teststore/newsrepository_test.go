@@ -30,3 +30,18 @@ func TestNewsRepository_Get(t *testing.T) {
 	assert.NotNil(t, news)
 	assert.Equal(t, len(*news), 2)
 }
+
+func TestNewsRepository_GetNewsByTitle(t *testing.T) {
+	s := teststore.New()
+
+	n := models.TestNews()
+
+	s.News().Create(n)
+
+	searched1, err := s.News().GetNewsByTitle("invalid")
+	searched2, err := s.News().GetNewsByTitle("Test")
+
+	assert.NoError(t, err)
+	assert.Empty(t, searched1)
+	assert.NotEmpty(t, searched2)
+}

@@ -67,7 +67,18 @@ func (s *server) handleNewsGetList() http.HandlerFunc {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-		news, err := s.store.News().GetList()
+		var (
+			news *[]models.News
+			err  error
+		)
+		search, present := r.URL.Query()["search"]
+
+		if !present || len(search) == 0 {
+			news, err = s.store.News().GetList()
+		} else {
+			news, err = s.store.News().GetNewsByTitle(search[0])
+		}
+
 		if err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
