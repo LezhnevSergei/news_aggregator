@@ -1,9 +1,10 @@
 import './App.css'
 import {useEffect, useState} from "react"
-import {getNewsList} from "./api"
+import {getNewsByTitle, getNewsList} from "./api"
 
 function App() {
 	const [newsList, setNewsList] = useState([])
+	const [search, setSearch] = useState("")
 
 	useEffect(() => {
 		getNewsList().then(news => {
@@ -11,8 +12,33 @@ function App() {
 		})
 	}, [])
 
+	const searchTextHandler = (e) => {
+		setSearch(e.target.value)
+	}
+
+	const searchHandler = () => {
+		getNewsByTitle(search).then(news => {
+			setNewsList(news || [])
+			setSearch("")
+		})
+	}
+
 	return (
 		<div className="App">
+			<div className="news_search">
+				<input
+					type="text"
+					className="news_search__input"
+					value={search}
+					onChange={e => searchTextHandler(e)}
+				/>
+				<button
+					className="news_search__button"
+					onClick={searchHandler}
+				>
+					Поиск
+				</button>
+			</div>
 			<div className="news_list">
 				{
 					newsList.map(news => {
@@ -30,7 +56,6 @@ function App() {
 					})
 				}
 			</div>
-
 		</div>
 	)
 }
