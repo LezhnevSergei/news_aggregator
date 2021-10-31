@@ -57,3 +57,24 @@
 .news_item__title {
   margin-bottom: 10px;
 }
+
+.news_search {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news_search__input {
+  height: 30px;
+  width: 300px;
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.news_search__button {
+  height: 30px;
+  width: 80px;
+  cursor: pointer;
+}
